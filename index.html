@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>任务列表</title>
+		<link rel="stylesheet" type="text/css" href="css/css.css" />
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div class="task" id="app">
+			<div class="head">
+				<div class="wrap">任务计划列表</div>
+			</div>
+			<div class="content">
+				<div class="wrap">
+					<div class="addTask">
+						添加任务：
+					</div>
+					<div class="addTaskText">
+						<input 
+							type="text" 
+							placeholder="输入任务信息" 
+							v-model="todo"
+							v-on:keyup.13="addTask"
+							
+						/>
+					</div>
+					<div class="taskOp">
+						<span class="title">{{noCheckedLength}}个任务未完成</span>
+						<div class="ops">
+							<a href="#all" :class="{active: visibility=='all'}">原有任务</a>
+							<a href="#unfinshed" :class="{active: visibility=='unfinshed'}">未完成任务</a>
+							<a href="#finshed" :class="{active: visibility=='finshed'}">完成的任务</a>
+						</div>
+					</div>
+					<div class="taskList">
+						任务列表：
+					</div>
+					<div class="list">
+						<span class="no-task" v-show="visibility=='all'&&!filterList.length">你还没有添加人任何计划！</span>
+						<span class="no-task" v-show="visibility=='unfinshed'&&!filterList.length">你还没有任何未完成的计划！</span>
+						<span class="no-task" v-show="visibility=='finshed'&&!filterList.length">你还没有任何已完成的计划！</span>
+						<ul>
+							<li class="" v-for="item in filterList" :class="{edit:isEdit===item}">
+								<div class="taskTitle">
+									<input type="checkbox" v-model="item.isChecked" :disabled="item.isChecked"/>
+									<span @dblclick="editItem(item)">{{item.title}}</span>
+									<a href="javascript:;" @click="deleteItem(item)">&times;</a>
+								</div>
+								<div class="editer">
+									<input 
+										type="text" 
+										v-model="item.title" 
+										v-focus="isEdit===item"
+										@blur="edited(item)"
+										@keyup.13="edited(item)"
+										@keyup.esc="cancelItem(item)"
+									/>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+	
+</html>
